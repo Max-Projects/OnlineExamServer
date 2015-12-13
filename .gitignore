@@ -67,3 +67,5 @@ dist/
 nbdist/
 nbactions.xml
 .nb-gradle/
+OnlineExamSystemAPI/nbproject/private/config.properties
+OnlineExamSystemAPI/nbproject/private/private.properties
