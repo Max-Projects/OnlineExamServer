@@ -69,3 +69,4 @@ nbactions.xml
 .nb-gradle/
 OnlineExamSystemAPI/nbproject/private/config.properties
 OnlineExamSystemAPI/nbproject/private/private.properties
+OnlineExamSystemAPI/nbproject/private/private.xml
