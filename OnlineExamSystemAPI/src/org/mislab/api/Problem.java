@@ -27,6 +27,10 @@ public class Problem {
         return description;
     }
     
+    public List<TestData> getTestData() {
+        return testdata;
+    }
+    
     class TestData {
         public final String input;
         public final String output;

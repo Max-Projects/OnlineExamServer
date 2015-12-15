@@ -1,5 +1,8 @@
 package org.mislab.api;
 
+import com.google.gson.JsonObject;
+import java.io.UnsupportedEncodingException;
+import java.util.logging.Level;
 import javafx.scene.input.KeyEvent;
 
 public class Student extends User {
@@ -21,7 +24,7 @@ public class Student extends User {
         
         JsonObject json = new JsonObject();
         
-        json.put("sourceCode", sourceCode);
+        json.addProperty("sourceCode", sourceCode);
         
         return Utils.post(CLIENT, uri, json);
     }
@@ -32,9 +35,23 @@ public class Student extends User {
         
         JsonObject json = new JsonObject();
         
-        json.put("snapshot", snapshot);
+        try {
+            json.addProperty("snapshot", new String(snapshot, "UTF-8"));
+        } catch (UnsupportedEncodingException ex) {
+            json.addProperty("snapshot", "");
+            
+            LOGGER.log(Level.SEVERE, null, ex);
+        }
         
         return Utils.post(CLIENT, uri, json);
+    }
+    
+    public Response sendTestResult(int courseId, int examId, int problemId,
+            String result) {
+        String uri = String.format("/course/%d/exam/%d/problem/%d/student/%s/test-result",
+                courseId, examId, problemId, super.profile.getStudentId());
+        
+        return Utils.get(CLIENT, uri);
     }
     
     public Response sendKeyEvent(int courseId, int examId, KeyEvent keyEvent) {
@@ -43,7 +60,8 @@ public class Student extends User {
         
         JsonObject json = new JsonObject();
         
-        json.put("keyEvent", keyEvent);
+        json.addProperty("keyCode", keyEvent.getCode().ordinal());
+        json.addProperty("keyEventType", keyEvent.getEventType().getName());
         
         return Utils.post(CLIENT, uri, json);
     }

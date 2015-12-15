@@ -1,14 +1,18 @@
 package org.mislab.api;
 
+import com.google.gson.JsonObject;
 import com.squareup.okhttp.OkHttpClient;
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public abstract class User {
-    public static final Logger LOGGER;
+    protected static final Logger LOGGER;
     protected final static OkHttpClient CLIENT;
     
     protected final int userId;
+    protected UserProfile profile;
     
     static {
         LOGGER = Logger.getLogger(JsonObject.class.getName());
@@ -17,13 +21,29 @@ public abstract class User {
     
     public User(int uid) {
         this.userId = uid;
+        
+        initProfile();
+    }
+    
+    private void initProfile() {
+        Response res = getProfile();
+        
+        if (res.success()) {
+            Map content = res.getContent();
+            
+            profile = new UserProfile(
+                    content.get("userName").toString(),
+                    content.get("studentId").toString(),
+                    content.get("email").toString(),
+                    Integer.parseInt(content.get("graduateYear").toString()));
+        }
     }
     
     public static Response login(String userName, String password) {
         JsonObject json = new JsonObject();
         
-        json.put("userName", userName);
-        json.put("password", password);
+        json.addProperty("userName", userName);
+        json.addProperty("password", password);
         
         Response res = Utils.post(CLIENT, "/user/login", json);
         
@@ -47,15 +67,23 @@ public abstract class User {
     }
     
     public static Response register(String userName, String password, Role role,
-            String email, int graduateYear, byte[] image) {
+            String studentId, String email, int graduateYear, byte[] image) {
         JsonObject json = new JsonObject();
         
-        json.put("userName", userName);
-        json.put("password", password);
-        json.put("role", role.toString());
-        json.put("email", email);
-        json.put("graduateYear", graduateYear);
-        json.put("profilePhoto", image);
+        json.addProperty("userName", userName);
+        json.addProperty("password", password);
+        json.addProperty("role", role.toString());
+        json.addProperty("studentId", studentId);
+        json.addProperty("email", email);
+        json.addProperty("graduateYear", graduateYear);
+        
+        try {
+            json.addProperty("profilePhoto", new String(image, "UTF-8"));
+        } catch (UnsupportedEncodingException ex) {
+            json.addProperty("profilePhoto", "");
+            
+            LOGGER.log(Level.SEVERE, null, ex);
+        }
         
         return Utils.post(CLIENT, "/user/register", json);
     }
@@ -63,7 +91,7 @@ public abstract class User {
     public static Response forgetPassword(String userName) {
         JsonObject json = new JsonObject();
         
-        json.put("userName", userName);
+        json.addProperty("userName", userName);
         
         return Utils.post(CLIENT, "/user/forget-password", json);
     }
@@ -71,9 +99,9 @@ public abstract class User {
     public Response resetPassword(String oldPassword, String newPassword) {
         JsonObject json = new JsonObject();
         
-        json.put("userId", userId);
-        json.put("oldPassword", oldPassword);
-        json.put("newPassword", newPassword);
+        json.addProperty("userId", userId);
+        json.addProperty("oldPassword", oldPassword);
+        json.addProperty("newPassword", newPassword);
         
         return Utils.post(CLIENT, "/user/reset-password", json);
     }
@@ -95,8 +123,15 @@ public abstract class User {
         
         JsonObject json = new JsonObject();
         
-        json.put("userId", userId);
-        json.put("profilePhoto", image);
+        json.addProperty("userId", userId);
+        
+        try {
+            json.addProperty("profilePhoto", new String(image, "UTF-8"));
+        } catch (UnsupportedEncodingException ex) {
+            json.addProperty("profilePhoto", "");
+            
+            LOGGER.log(Level.SEVERE, null, ex);
+        }
         
         return Utils.post(CLIENT, uri, json);
     }
@@ -104,7 +139,7 @@ public abstract class User {
     public Response logout() {
         JsonObject json = new JsonObject();
         
-        json.put("userId", userId);
+        json.addProperty("userId", userId);
         
         return Utils.post(CLIENT, "/user/logout", json);
     }
@@ -132,8 +167,8 @@ public abstract class User {
         
         JsonObject json = new JsonObject();
         
-        json.put("userId", userId);
-        json.put("message", message);
+        json.addProperty("userId", userId);
+        json.addProperty("message", message);
         
         return Utils.post(CLIENT, uri, json);
     }

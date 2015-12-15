@@ -1,6 +1,7 @@
 package org.mislab.api;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
