@@ -63,10 +63,12 @@ $RECYCLE.BIN/
 nbproject/private/
 build/
 nbbuild/
-dist/
 nbdist/
 nbactions.xml
 .nb-gradle/
 OnlineExamSystemAPI/nbproject/private/config.properties
 OnlineExamSystemAPI/nbproject/private/private.properties
 OnlineExamSystemAPI/nbproject/private/private.xml
+
+!OnlineExamSystemAPI/libs/*
+!OnlineExamSystemAPI/dist/*
