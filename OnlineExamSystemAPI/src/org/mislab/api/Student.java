@@ -18,13 +18,14 @@ public class Student extends User {
     }
     
     public Response submitSourceCode(int courseId, int examId, int problemId,
-            String sourceCode) {
+            String sourceCode, String sourceCodeFileName) {
         String uri = String.format("/course/%d/exam/%d/problem/%d/student/%d/source-code",
                 courseId, examId, problemId, super.userId);
         
         JsonObject json = new JsonObject();
         
         json.addProperty("sourceCode", sourceCode);
+        json.addProperty("sourceCodeFileName", sourceCodeFileName);
         
         return Utils.post(CLIENT, uri, json);
     }

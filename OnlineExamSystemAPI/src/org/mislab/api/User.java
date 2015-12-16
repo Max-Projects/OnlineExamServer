@@ -44,6 +44,7 @@ public abstract class User {
         
         json.addProperty("userName", userName);
         json.addProperty("password", password);
+        json.addProperty("ip", Utils.getIPAddress());
         
         Response res = Utils.post(CLIENT, "/user/login", json);
         

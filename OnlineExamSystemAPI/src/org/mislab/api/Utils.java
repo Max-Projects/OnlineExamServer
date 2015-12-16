@@ -7,6 +7,8 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -65,5 +67,15 @@ public class Utils {
         }
         
         return response;
+    }
+    
+    public static String getIPAddress() {
+        try {
+            return InetAddress.getLocalHost().getHostAddress();
+        } catch (UnknownHostException ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+            
+            return "localhost";
+        }
     }
 }
