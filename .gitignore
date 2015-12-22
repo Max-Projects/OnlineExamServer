@@ -72,3 +72,4 @@ OnlineExamSystemAPI/nbproject/private/private.xml
 
 !OnlineExamSystemAPI/libs/*
 !OnlineExamSystemAPI/dist/*
+/OnlineExamSystemAPI/nbproject/private/

@@ -22,22 +22,15 @@ public class Utils {
         LOGGER = Logger.getLogger(Utils.class.getName());
     }
     
-    public static Response post(OkHttpClient client, String url, JsonObject json) {
-        RequestBody body = RequestBody.create(JSON, json.toString());
-        
-        Request request = new Request.Builder()
-                .url(Config.HOST + url)
-                .post(body)
-                .build();
-        
+    private static Response sendRequest(OkHttpClient client, Request request) {
         Response response;
         
         try {
             com.squareup.okhttp.Response r = client.newCall(request).execute();
             
             Gson gson = new Gson();
-            Map map = (Map) gson.fromJson(r.body().string(), Object.class);
-            response = new Response(map);
+            JsonObject json = gson.fromJson(r.body().string(), JsonObject.class);
+            response = new Response(json);
         } catch (IOException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
             
@@ -47,26 +40,23 @@ public class Utils {
         return response;
     }
     
+    public static Response post(OkHttpClient client, String url, JsonObject json) {
+        RequestBody body = RequestBody.create(JSON, json.toString());
+        
+        Request request = new Request.Builder()
+                .url(Config.HOST + url)
+                .post(body)
+                .build();
+        
+        return sendRequest(client, request);
+    }
+    
     public static Response get(OkHttpClient client, String url) {
         Request request = new Request.Builder()
                 .url(Config.HOST + url)
                 .build();
         
-        Response response;
-        
-        try {
-            com.squareup.okhttp.Response r = client.newCall(request).execute();
-            
-            Gson gson = new Gson();
-            Map map = (Map) gson.fromJson(r.body().string(), Object.class);
-            response = new Response(map);
-        } catch (IOException ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
-            
-            response = new Response(ErrorCode.NetworkError);
-        }
-        
-        return response;
+        return sendRequest(client, request);
     }
     
     public static String getIPAddress() {

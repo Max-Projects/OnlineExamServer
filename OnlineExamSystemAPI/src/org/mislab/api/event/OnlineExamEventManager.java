@@ -28,7 +28,7 @@ public class OnlineExamEventManager {
         listeners.remove(listener);
     }
 
-    private synchronized void fireEvent(OnlineExamEvent e) {
+    public synchronized void fireEvent(OnlineExamEvent e) {
         for (OnlineExamEventListener listener: listeners) {
             listener.handleOnlineExamEvent(e);
         }

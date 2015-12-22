@@ -2,8 +2,16 @@ package org.mislab.api;
 
 public enum ErrorCode {
     OK,
-    UnknowState,
+    UnknownState,
     NetworkError,
     JsonParseError,
-    InvalidUserNameOrPassword
+    InvalidUserNameOrPassword,
+    UserNotLoggedIn,
+    CourseNotFound,
+    TooFewArgument,
+    StudentNotFound,
+    ExamNotFound,
+    ExamAlreadyFinishScoring,
+    WrongArgumentType,
+    AnswerSheetNotFound
 }

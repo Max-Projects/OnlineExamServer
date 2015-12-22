@@ -7,6 +7,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.mislab.api.event.OnlineExamEvent;
+import org.mislab.api.event.OnlineExamEventManager;
 
 public class SocketServer extends Thread {
     private static final Logger LOGGER;
@@ -16,13 +18,16 @@ public class SocketServer extends Thread {
     }
     
     private ServerSocket server;
+    private final OnlineExamEventManager eventManager;
     
     public SocketServer() {
         try {
-            server = new ServerSocket();
+            server = new ServerSocket(Config.PORT);
         } catch (IOException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
         }
+        
+        eventManager = OnlineExamEventManager.getInstance();
     }
     
     @Override
@@ -41,6 +46,10 @@ public class SocketServer extends Thread {
     private void handleConnection(Socket socket) {
         try (ObjectInputStream ois = new ObjectInputStream(socket.getInputStream())) {
             JsonObject json = (JsonObject) ois.readObject();
+            
+            OnlineExamEvent event = new OnlineExamEvent(json);
+            
+            eventManager.fireEvent(event);
         } catch (IOException | ClassNotFoundException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
         }

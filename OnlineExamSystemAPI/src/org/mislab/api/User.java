@@ -13,6 +13,7 @@ public abstract class User {
     
     protected final int userId;
     protected UserProfile profile;
+    protected SocketServer socketServer;
     
     static {
         LOGGER = Logger.getLogger(JsonObject.class.getName());
@@ -21,6 +22,7 @@ public abstract class User {
     
     public User(int uid) {
         this.userId = uid;
+        this.socketServer = new SocketServer();
         
         initProfile();
     }
@@ -39,6 +41,10 @@ public abstract class User {
         }
     }
     
+    private void startSocketServer() {
+        socketServer.start();
+    }
+    
     public static Response login(String userName, String password) {
         JsonObject json = new JsonObject();
         
@@ -52,19 +58,23 @@ public abstract class User {
             Map content = res.getContent();
             int uid = Integer.valueOf(content.get("userId").toString());
             
+            User user = null;
+            
             switch (content.get("role").toString()) {
                 case "teacher":
-                    content.put("user", new Teacher(uid));
+                    res.addContent("user", user = new Teacher(uid));
                     break;
                 case "student":
-                    content.put("user", new Student(uid));
+                    res.addContent("user", user = new Student(uid));
                     break;
             }
             
-            return new Response(content);
-        } else {
-            return new Response(res.getErrorCode());
+            if (user != null) {
+                user.startSocketServer();
+            }
         }
+        
+        return res;
     }
     
     public static Response register(String userName, String password, Role role,
@@ -138,6 +148,8 @@ public abstract class User {
     }
     
     public Response logout() {
+        socketServer.interrupt();
+        
         JsonObject json = new JsonObject();
         
         json.addProperty("userId", userId);
@@ -151,6 +163,13 @@ public abstract class User {
     
     public Response queryExams(int courseId) {
         String uri = String.format("/course/%d/exam", courseId);
+        
+        return Utils.get(CLIENT, uri);
+    }
+    
+    public Response queryProblems(int courseId, int examId) {
+        String uri = String.format("/course/%d/exam/%d/problem", 
+            courseId, examId);
         
         return Utils.get(CLIENT, uri);
     }
