@@ -13,5 +13,9 @@ public enum ErrorCode {
     ExamNotFound,
     ExamAlreadyFinishScoring,
     WrongArgumentType,
-    AnswerSheetNotFound
+    AnswerSheetNotFound,
+    SomethingNotFound,
+    ProblemNotFound,
+    UserNotFound,
+    DuplicatedRegistration
 }

@@ -37,7 +37,7 @@ public abstract class User {
                     content.get("userName").toString(),
                     content.get("studentId").toString(),
                     content.get("email").toString(),
-                    Integer.parseInt(content.get("graduateYear").toString()));
+                    Utils.doubleStr2int(content.get("graduateYear").toString()));
         }
     }
     
@@ -56,7 +56,7 @@ public abstract class User {
         
         if (res.success()) {
             Map content = res.getContent();
-            int uid = Integer.valueOf(content.get("userId").toString());
+            int uid = Utils.doubleStr2int(content.get("userId").toString());
             
             User user = null;
             
@@ -77,12 +77,13 @@ public abstract class User {
         return res;
     }
     
-    public static Response register(String userName, String password, Role role,
-            String studentId, String email, int graduateYear, byte[] image) {
+    public static Response register(String userName, String password, String name,
+        Role role, String studentId, String email, int graduateYear, byte[] image) {
         JsonObject json = new JsonObject();
         
         json.addProperty("userName", userName);
         json.addProperty("password", password);
+        json.addProperty("name", name);
         json.addProperty("role", role.toString());
         json.addProperty("studentId", studentId);
         json.addProperty("email", email);
@@ -148,13 +149,11 @@ public abstract class User {
     }
     
     public Response logout() {
-        socketServer.interrupt();
+        String uri = String.format("/user/%d/logout", userId);
         
-        JsonObject json = new JsonObject();
+        socketServer.closeServer();
         
-        json.addProperty("userId", userId);
-        
-        return Utils.post(CLIENT, "/user/logout", json);
+        return Utils.get(CLIENT, uri);
     }
     
     public Response queryCourses() {

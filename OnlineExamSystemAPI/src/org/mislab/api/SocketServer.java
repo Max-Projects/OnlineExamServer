@@ -32,7 +32,7 @@ public class SocketServer extends Thread {
     
     @Override
     public void run() {
-        while (true) {
+        while (!server.isClosed()) {
             try {
                 Socket socket = server.accept();
                 
@@ -55,4 +55,11 @@ public class SocketServer extends Thread {
         }
     }
     
+    protected void closeServer() {
+        try {
+            server.close();
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+        }
+    }
 }

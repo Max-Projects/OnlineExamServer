@@ -6,20 +6,19 @@ import java.util.Map;
 
 public class Response {
     private final ErrorCode errorCode;
-    private final Map<String, Object> content;
+    private Map<String, Object> content;
     
     public Response(JsonObject json) {
         this.errorCode = ErrorCode.values()[json.get("errorCode").getAsInt()];
         
         if (errorCode == ErrorCode.OK) {
-            String contentStr = json.get("content").getAsString();
-            
-            if (contentStr == null || contentStr.length() == 0) {
-                this.content = null;
-            } else {
+            try {
+                JsonObject contentJson = json.get("content").getAsJsonObject();
+                
                 Gson gson = new Gson();
-
-                this.content = (Map) gson.fromJson(contentStr, Object.class);
+                this.content = (Map) gson.fromJson(contentJson, Object.class);
+            } catch (NullPointerException ex) {
+                this.content = null;
             }
         } else {
             this.content = null;

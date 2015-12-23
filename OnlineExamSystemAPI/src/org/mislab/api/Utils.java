@@ -9,7 +9,6 @@ import com.squareup.okhttp.RequestBody;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -67,5 +66,9 @@ public class Utils {
             
             return "localhost";
         }
+    }
+    
+    public static int doubleStr2int(String doubleStr) {
+        return Double.valueOf(doubleStr).intValue();
     }
 }
