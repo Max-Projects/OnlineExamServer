@@ -31,7 +31,7 @@ public class Problem {
         return testdata;
     }
     
-    class TestData {
+    public class TestData {
         public final String input;
         public final String output;
         

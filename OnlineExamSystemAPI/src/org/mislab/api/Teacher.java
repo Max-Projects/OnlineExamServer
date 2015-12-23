@@ -47,28 +47,6 @@ public class Teacher extends User {
         json.addProperty("beginTime", begin.toString());
         json.addProperty("duration", durationInMinutes);
         
-        JsonArray problemsJson = new JsonArray();
-        
-        for (Problem problem: problems) {
-            JsonObject probJson = new JsonObject();
-            
-            probJson.addProperty("title", problem.getTitle());
-            probJson.addProperty("description", problem.getDescription());
-            
-            JsonArray testdataJson = new JsonArray();
-            
-            for (TestData td: problem.getTestData()) {
-                JsonObject tdJson = new JsonObject();
-                
-                tdJson.addProperty("input", td.input);
-                tdJson.addProperty("output", td.output);
-                
-                testdataJson.add(tdJson);
-            }
-        }
-        
-        json.add("problems", problemsJson);
-        
         return Utils.post(CLIENT, uri, json);
     }
     
@@ -76,6 +54,29 @@ public class Teacher extends User {
         String uri = String.format("/course/%d/exam/%d/remove", courseId, examId);
         
         return Utils.get(CLIENT, uri);
+    }
+    
+    public Response createProblem(int courseId, int examId, Problem problem) {
+        String uri = String.format("/course/%d/exam/%d/problem/add",
+            courseId, examId);
+        
+        JsonObject json = new JsonObject();
+        
+        json.addProperty("title", problem.getTitle());
+        json.addProperty("description", problem.getDescription());
+        
+        JsonArray tdArr = new JsonArray();
+        
+        for (TestData td: problem.getTestData()) {
+            JsonObject tdJson = new JsonObject();
+            
+            tdJson.addProperty("input", td.input);
+            tdJson.addProperty("output", td.output);
+        }
+        
+        json.add("testdata", tdArr);
+        
+        return Utils.post(CLIENT, uri, json);
     }
     
     public Response queryStudents(int courseId) {
@@ -163,7 +164,7 @@ public class Teacher extends User {
     
     public Response scoreAndComment(int courseId, int examId, int problemId,
             String studentId, int score, String comment) {
-        String uri = String.format("/course/%d/exam/%d/problem/%d/student/%s/score",
+        String uri = String.format("/course/%d/exam/%d/problem/%d/student/%s/score-and-comment",
                 courseId, examId, problemId, studentId);
         
         JsonObject json = new JsonObject();
