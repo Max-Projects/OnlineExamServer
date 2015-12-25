@@ -37,7 +37,7 @@ public abstract class User {
                     content.get("userName").toString(),
                     content.get("studentId").toString(),
                     content.get("email").toString(),
-                    Utils.doubleStr2int(content.get("graduateYear").toString()));
+                    (int) content.get("graduateYear"));
         }
     }
     
@@ -56,7 +56,7 @@ public abstract class User {
         
         if (res.success()) {
             Map content = res.getContent();
-            int uid = Utils.doubleStr2int(content.get("userId").toString());
+            int uid = (int) content.get("userId");
             
             User user = null;
             

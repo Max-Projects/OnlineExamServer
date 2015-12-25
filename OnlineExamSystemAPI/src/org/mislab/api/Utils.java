@@ -9,6 +9,9 @@ import com.squareup.okhttp.RequestBody;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -68,7 +71,45 @@ public class Utils {
         }
     }
     
-    public static int doubleStr2int(String doubleStr) {
-        return Double.valueOf(doubleStr).intValue();
+    public static Map<String, Object> convert2Integer(Map<String, Object> map) {
+        for (String key: map.keySet()) {
+            Object value = map.get(key);
+            
+            if (value instanceof Map) {
+                map.put(key, convert2Integer((Map) value));
+            } else if (value instanceof List) {
+                map.put(key, convert2Integer((List) value));
+            } else if (value instanceof Double) {
+                double d = (Double) value;
+                
+                if (Math.round(d) == (int) d) {
+                    map.put(key, (int) d);
+                }
+            }
+        }
+        
+        return map;
+    }
+    
+    public static List convert2Integer(List list) {
+        List newList = new ArrayList();
+        
+        for (Object value: list) {
+            if (value instanceof Map) {
+                newList.add(convert2Integer((Map) value));
+            } else if (value instanceof Double) {
+                double d = (Double) value;
+                
+                if (Math.round(d) == (int) d) {
+                    newList.add((int) d);
+                } else {
+                    newList.add(d);
+                }
+            } else {
+                newList.add(value);
+            }
+        }
+        
+        return newList;
     }
 }

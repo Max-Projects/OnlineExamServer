@@ -17,6 +17,7 @@ public class Response {
                 
                 Gson gson = new Gson();
                 this.content = (Map) gson.fromJson(contentJson, Object.class);
+                this.content = Utils.convert2Integer(this.content);
             } catch (NullPointerException ex) {
                 this.content = null;
             }

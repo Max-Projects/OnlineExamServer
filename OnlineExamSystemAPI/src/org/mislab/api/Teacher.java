@@ -37,8 +37,8 @@ public class Teacher extends User {
         return Utils.get(CLIENT, uri);
     }
     
-    public Response createExam(int courseId, String examName,
-            List<Problem> problems, Timestamp begin, int durationInMinutes) {
+    public Response createExam(int courseId, String examName, Timestamp begin,
+        int durationInMinutes) {
         String uri = String.format("/course/%d/exam/add", courseId);
         
         JsonObject json = new JsonObject();
