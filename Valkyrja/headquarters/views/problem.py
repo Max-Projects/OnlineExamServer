@@ -18,7 +18,7 @@ def problems_list(request, c_id, e_id):
     else:
         problems = []
 
-        for problem in exam.problems:
+        for problem in exam.problems.all():
             problems.append({
                 "id": problem.id,
                 "problemName": problem.title,
@@ -190,7 +190,7 @@ def get_test_data(request, c_id, e_id, p_id):
     else:
         test_data = []
 
-        for td in problem.test_data:
+        for td in problem.test_data.all():
             test_data.append({
                 "input": td.input,
                 "output": td.output

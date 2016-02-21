@@ -37,9 +37,7 @@ def create_course(request):
         year = req_body["year"]
         semester = req_body["semester"]
         student_ids = req_body["studentIds"]
-    except KeyError:
-        response_data["errorCode"] = ErrorCode.TooFewArgument
-    else:
+
         course = Course.objects.create(
             title=course_name,
             year=year,
@@ -53,6 +51,10 @@ def create_course(request):
         response_data["content"] = {
             "courseId": course.id
         }
+    except KeyError:
+        response_data["errorCode"] = ErrorCode.TooFewArgument
+    except ObjectDoesNotExist:
+        response_data["errorCode"] = ErrorCode.StudentNotFound
 
     return HttpResponse(json.dumps(response_data))
 
