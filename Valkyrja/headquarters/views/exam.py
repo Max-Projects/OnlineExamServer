@@ -197,30 +197,42 @@ def handle_key_event(request, c_id, e_id, s_id):
 def exam_scoring_and_comment(request, c_id, e_id, s_id):
     response_data = {"errorCode": ErrorCode.OK}
 
-    try:
-        req_body = json.loads(request.body.decode("utf-8"))
+    if request.method == "GET":
+        try:
+            exam = Exam.objects.get(id=e_id)
+            student = User.objects.get(student_id=s_id)
 
-        score = req_body["score"]
-        comment = req_body["comment"]
-
-        exam = Exam.objects.get(id=e_id)
-        student = User.objects.get(student_id=s_id)
-    except KeyError:
-        response_data["errorCode"] = ErrorCode.TooFewArgument
-    except ObjectDoesNotExist:
-        response_data["errorCode"] = ErrorCode.SomethingNotFound
-    else:
-        if not exam.finish_scoring:
-            ExamResult.objects.filter(exam=exam, student=student).delete()
-
-            ExamResult.objects.create(
-                exam=exam,
-                student=student,
-                score=score,
-                comment=comment
-            )
+            result = ExamResult.objects.get(exam=exam, student=student)
+        except ObjectDoesNotExist:
+            response_data["errorCode"] = ErrorCode.SomethingNotFound
         else:
-            response_data["errorCode"] = ErrorCode.ExamAlreadyFinishScoring
+            response_data["score"] = result.score
+            response_data["comment"] = result.comment
+    elif request.method == "POST":
+        try:
+            req_body = json.loads(request.body.decode("utf-8"))
+
+            score = req_body["score"]
+            comment = req_body["comment"]
+
+            exam = Exam.objects.get(id=e_id)
+            student = User.objects.get(student_id=s_id)
+        except KeyError:
+            response_data["errorCode"] = ErrorCode.TooFewArgument
+        except ObjectDoesNotExist:
+            response_data["errorCode"] = ErrorCode.SomethingNotFound
+        else:
+            if not exam.finish_scoring:
+                ExamResult.objects.filter(exam=exam, student=student).delete()
+
+                ExamResult.objects.create(
+                    exam=exam,
+                    student=student,
+                    score=score,
+                    comment=comment
+                )
+            else:
+                response_data["errorCode"] = ErrorCode.ExamAlreadyFinishScoring
 
     return HttpResponse(json.dumps(response_data))
 

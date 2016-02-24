@@ -68,7 +68,7 @@ public class Student extends User {
     }
     
     public Response queryExamResults(int courseId, int examId) {
-        String uri = String.format("/course/%d/exam/%d/student/%d/score",
+        String uri = String.format("/course/%d/exam/%d/student/%d/score-and-comment",
                 courseId, examId, super.userId);
         
         return Utils.get(CLIENT, uri);
