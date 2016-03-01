@@ -1,8 +1,8 @@
-from enum import Enum, unique
+from enum import IntEnum, unique
 
 
 @unique
-class UserState(Enum):
+class UserState(IntEnum):
     Login = 0
     Logout = 1
     InExam = 2

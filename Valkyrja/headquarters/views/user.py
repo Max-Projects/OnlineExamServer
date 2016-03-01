@@ -31,8 +31,9 @@ def login(request):
             "role": user.role
         }
 
+        LoggingInUser.objects.filter(user=user).delete()
         LoggingInUser.objects.create(ip_address=ip,
-                                     state=UserState.Login.value,
+                                     state=UserState.Login,
                                      user=user)
 
         if user.role == "student":

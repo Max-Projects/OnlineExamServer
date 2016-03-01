@@ -83,13 +83,14 @@ def course_students_list(request, c_id):
         students = []
 
         for student in course.students.all():
-            is_login = LoggingInUser.objects.filter(user=student).exists()
+            record = LoggingInUser.objects.filter(user=student)
+            is_login = record.exists()
 
             students.append({
                 "id": student.student_id,
                 "name": student.name,
                 "graduateYear": student.graduate_year,
-                "state": UserState(student.state).name if is_login else "logout",
+                "state": UserState(record.first().state).name if is_login else "logout",
                 "profilePhoto": student.profile_photo.decode("utf-8")
             })
 
