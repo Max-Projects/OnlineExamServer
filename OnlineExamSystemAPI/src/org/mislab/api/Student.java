@@ -11,16 +11,16 @@ public class Student extends User {
     }
     
     public Response attendExam(int courseId, int examId) {
-        String uri = String.format("/course/%d/exam/%d/student/%d/attend",
-                courseId, examId, super.userId);
+        String uri = String.format("/course/%d/exam/%d/student/%s/attend",
+                courseId, examId, super.profile.getStudentId());
         
         return Utils.get(CLIENT, uri);
     }
     
     public Response submitSourceCode(int courseId, int examId, int problemId,
             String sourceCode, String sourceCodeFileName) {
-        String uri = String.format("/course/%d/exam/%d/problem/%d/student/%d/source-code",
-                courseId, examId, problemId, super.userId);
+        String uri = String.format("/course/%d/exam/%d/problem/%d/student/%s/source-code",
+                courseId, examId, problemId, super.profile.getStudentId());
         
         JsonObject json = new JsonObject();
         
@@ -31,8 +31,8 @@ public class Student extends User {
     }
     
     public Response sendSnapshot(int courseId, int examId, byte[] snapshot) {
-        String uri = String.format("/course/%d/exam/%d/student/%d/snapshot",
-                courseId, examId, super.userId);
+        String uri = String.format("/course/%d/exam/%d/student/%s/snapshot",
+                courseId, examId, super.profile.getStudentId());
         
         JsonObject json = new JsonObject();
         
@@ -56,8 +56,8 @@ public class Student extends User {
     }
     
     public Response sendKeyEvent(int courseId, int examId, KeyEvent keyEvent) {
-        String uri = String.format("/course/%d/exam/%d/student/%d/monitor/send-key-event",
-                courseId, examId, super.userId);
+        String uri = String.format("/course/%d/exam/%d/student/%s/monitor/send-key-event",
+                courseId, examId, super.profile.getStudentId());
         
         JsonObject json = new JsonObject();
         
@@ -68,8 +68,8 @@ public class Student extends User {
     }
     
     public Response queryExamResults(int courseId, int examId) {
-        String uri = String.format("/course/%d/exam/%d/student/%d/score-and-comment",
-                courseId, examId, super.userId);
+        String uri = String.format("/course/%d/exam/%d/student/%s/score-and-comment",
+                courseId, examId, super.profile.getStudentId());
         
         return Utils.get(CLIENT, uri);
     }
