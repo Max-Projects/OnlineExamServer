@@ -1,7 +1,10 @@
 package org.mislab.api;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -32,6 +35,7 @@ public class SocketServer extends Thread {
     
     @Override
     public void run() {
+        System.out.println("start socket server...");
         while (!server.isClosed()) {
             try {
                 Socket socket = server.accept();
@@ -44,13 +48,15 @@ public class SocketServer extends Thread {
     }
     
     private void handleConnection(Socket socket) {
-        try (ObjectInputStream ois = new ObjectInputStream(socket.getInputStream())) {
-            JsonObject json = (JsonObject) ois.readObject();
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+            String jsonStr = br.readLine();
             
+            JsonObject json = new JsonParser().parse(jsonStr).getAsJsonObject();
+            System.out.println("Got an event: " + json.toString());
             OnlineExamEvent event = new OnlineExamEvent(json);
             
             eventManager.fireEvent(event);
-        } catch (IOException | ClassNotFoundException ex) {
+        } catch (IOException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
         }
     }

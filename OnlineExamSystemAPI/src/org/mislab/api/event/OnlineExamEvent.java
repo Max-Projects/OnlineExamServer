@@ -24,12 +24,11 @@ public class OnlineExamEvent extends EventObject {
         type = EventType.valueOf(json.get("type").getAsString());
         action = EventAction.valueOf(json.get("action").getAsString());
         
-        String contentStr = json.get("content").getAsString();
-        
-        if (contentStr == null || contentStr.length() == 0) {
+        if (!json.has("content")) {
             this.content = null;
         } else {
             Gson gson = new Gson();
+            String contentStr = json.get("content").getAsJsonObject().toString();
             
             this.content = gson.fromJson(contentStr, STR_STR_MAP_TYPE);
         }

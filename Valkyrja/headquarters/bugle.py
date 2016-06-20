@@ -1,13 +1,18 @@
 from headquarters.models import LoggingInUser, Course, User, Exam, Problem
 
 import socket
+import json
 
 
+# call() should be renamed to dispatchMessages()
 def call(targets_ip: list, message: dict):
+    print("call-targets_ip: " + str(len(targets_ip)))
     for target in targets_ip:
         sock = socket.socket()
         sock.connect((target, 3001))
-        sock.sendall(message)
+
+        sock.sendall(json.dumps(message).encode('UTF-8'))
+        print(str(message)+" is sent!")
         sock.close()
 
 
@@ -32,6 +37,7 @@ def new_message(exam: Exam, user: User, message: str):
 def student_login(student: User):
     teachers = LoggingInUser.objects.filter(user__is_admin=True)
 
+    print("teacher#: " + str(len(teachers)))
     call([teacher.ip_address for teacher in teachers], {
         "type": "User",
         "action": "Login",
