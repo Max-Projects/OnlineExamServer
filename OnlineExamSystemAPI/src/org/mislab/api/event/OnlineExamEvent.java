@@ -34,15 +34,28 @@ public class OnlineExamEvent extends EventObject {
         }
     }
     
-    public EventAction getTarget() {
+    /**
+     * get event action
+     * @return the action defined in EventAction class
+     */
+    public EventAction getAction() {
         return action;
     }
     
+    /**
+     * get event type
+     * @return the type defined in EventType class
+     */
     public EventType getType() {
         return type;
     }
     
     public Map<String, String> getContent() {
         return content;
+    }
+    
+    @Override
+    public String toString() {
+      return String.format("evtype:<%s,%s>", type, action);
     }
 }

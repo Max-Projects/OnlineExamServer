@@ -96,6 +96,15 @@ def attend_exam(request, c_id, e_id, s_id):
 
 
 def snapshot(request, c_id, e_id, s_id):
+    """
+    process tester's screen snapshot get/post
+    :param request: http request
+    :param c_id: course id
+    :param e_id: exam id
+    :param s_id: student id
+    :return: response
+    """
+
     response_data = {"errorCode": ErrorCode.OK}
 
     if request.method == "GET":

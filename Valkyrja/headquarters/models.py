@@ -87,9 +87,11 @@ class Snapshot(models.Model):
     create_time = models.DateTimeField(editable=False)
 
     def save(self, *args, **kwargs):
+        # if this is a new one
         if not self.id:
             self.create_time = timezone.now()
 
+        # not known yet!!!
         return super().save(*args, **kwargs)
 
 
