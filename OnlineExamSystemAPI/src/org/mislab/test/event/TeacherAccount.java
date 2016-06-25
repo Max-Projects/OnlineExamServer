@@ -46,8 +46,8 @@ public class TeacherAccount extends UserAccount {
         evMgr.addEventListener(this, EventType.User, EventAction.Login);
         evMgr.addEventListener(this, EventType.User, EventAction.Logout);
         evMgr.addEventListener(this, EventType.Chat, EventAction.NewMessage);
-        evMgr.addEventListener(this, EventType.Exam, EventAction.KeyEvent);
-        evMgr.addEventListener(this, EventType.Exam, EventAction.RequestSnapshot);
+        evMgr.addEventListener(this, EventType.Monitor, EventAction.KeyEvent);
+        evMgr.addEventListener(this, EventType.Monitor, EventAction.RequestSnapshot);
         evMgr.addEventListener(this, EventType.Exam, EventAction.Submit);        
     }
     

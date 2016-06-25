@@ -5,12 +5,6 @@
  */
 package org.mislab.test.event;
 
-import org.mislab.api.Response;
-import org.mislab.api.Teacher;
-import org.mislab.api.User;
-import org.mislab.api.event.EventAction;
-import org.mislab.api.event.EventType;
-import org.mislab.api.event.OnlineExamEvent;
 import org.mislab.api.event.OnlineExamEventListener;
 import org.mislab.api.event.OnlineExamEventManager;
 
@@ -20,7 +14,6 @@ import org.mislab.api.event.OnlineExamEventManager;
  */
 public abstract class UserAccount implements OnlineExamEventListener {
     protected OnlineExamEventManager evMgr = null;    
-    private String tname = "max", tpasswd = "max";
     
     public UserAccount() {
         evMgr = OnlineExamEventManager.getInstance();

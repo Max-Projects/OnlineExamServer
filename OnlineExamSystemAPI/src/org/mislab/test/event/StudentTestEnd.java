@@ -10,11 +10,6 @@ public class StudentTestEnd {
         new StData("bob", "bob") 
     };
         
-    public static TData[] tdata = {
-        new TData("max", "max"),
-        new TData("chico", "chico")
-    };    
-    
     public static void main(String[] args) {
         StudentAccount st = new StudentAccount(stdata[0].name, stdata[0].passwd);
         st.login();

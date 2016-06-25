@@ -5,11 +5,6 @@ package org.mislab.test.event;
  * @author Max
  */
 public class TeacherTestEnd {
-    public static StData[] stdata = { 
-        new StData("alan", "alan"),
-        new StData("bob", "bob") 
-    };
-        
     public static TData[] tdata = {
         new TData("max", "max"),
         new TData("chico", "chico")

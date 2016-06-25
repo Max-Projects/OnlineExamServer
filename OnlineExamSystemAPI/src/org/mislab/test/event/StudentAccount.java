@@ -28,8 +28,8 @@ public class StudentAccount extends UserAccount {
         evMgr.addEventListener(this, EventType.Exam, EventAction.Resume);
         evMgr.addEventListener(this, EventType.Exam, EventAction.Start);
         evMgr.addEventListener(this, EventType.Exam, EventAction.Stop);
-        evMgr.addEventListener(this, EventType.Exam, EventAction.NewMessage);
-        evMgr.addEventListener(this, EventType.Exam, EventAction.RequestSnapshot);        
+        evMgr.addEventListener(this, EventType.Chat, EventAction.NewMessage);
+        evMgr.addEventListener(this, EventType.Monitor, EventAction.RequestSnapshot);        
     }
     
     @Override
