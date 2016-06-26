@@ -11,8 +11,8 @@ public class StudentTestEnd {
     };
         
     public static void main(String[] args) {
-        StudentAccount st = new StudentAccount(stdata[0].name, stdata[0].passwd);
-        st.login();
-        st.logout();
+        StudentAccount stAccount = new StudentAccount(stdata[0].name, stdata[0].passwd);
+        stAccount.login();
+        stAccount.logout();
     }
 }

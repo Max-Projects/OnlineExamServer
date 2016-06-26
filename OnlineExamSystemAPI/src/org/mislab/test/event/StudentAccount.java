@@ -12,11 +12,10 @@ import org.mislab.api.event.OnlineExamEvent;
  * @author Max
  */
 public class StudentAccount extends UserAccount {
-    private String name, passwd;
     private Student student;
 
     public StudentAccount(String n, String pw) {
-        name = n; passwd = pw;
+        super(n, pw);
     }
 
     @Override
@@ -33,14 +32,15 @@ public class StudentAccount extends UserAccount {
     }
     
     @Override
-    public void login() {
-        Response res = User.login(name, passwd);
+    public User login() {
+        Response res = User.login(name, password);
         
         if (res.success()) {
             student =  (Student) res.getContent().get("user");
         } else {
             System.out.println(String.format("%s login FAILS!", name));
         }
+        return student;
     }
     
     @Override

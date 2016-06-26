@@ -5,6 +5,7 @@
  */
 package org.mislab.test.event;
 
+import org.mislab.api.User;
 import org.mislab.api.event.OnlineExamEventListener;
 import org.mislab.api.event.OnlineExamEventManager;
 
@@ -21,6 +22,6 @@ public abstract class UserAccount implements OnlineExamEventListener {
     }
 
     public abstract void setupEventListener();
-    public abstract void login();
+    public abstract User login();
     public abstract void logout();    
 }

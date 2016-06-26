@@ -13,22 +13,22 @@ import org.mislab.api.event.OnlineExamEvent;
  */
 public class TeacherAccount extends UserAccount {
     private Teacher tcher = null;
-    private String name, passwd;
 
     public TeacherAccount(String n, String pw) {
-        name = n; passwd = pw;
+        super(n, pw);
     }
 
     @Override
-    public void login() {
-        Response res = User.login(name, passwd);
+    public User login() {
+        Response res = User.login(name, password);
         
         if (res.success()) {
             System.out.println(name+" login success!");
-            tcher =  (Teacher) res.getContent().get("user");
+            tcher = (Teacher) res.getContent().get("user");
         } else {
             System.out.println(name+" login FAILED!!!");
         }
+        return tcher;
     }
     
     @Override
