@@ -1,5 +1,7 @@
 package org.mislab.test.event;
 
+import org.mislab.api.Student;
+
 /**
  *
  * @author Max
@@ -11,8 +13,10 @@ public class StudentTestEnd {
     };
         
     public static void main(String[] args) {
-        StudentAccount stAccount = new StudentAccount(stdata[0].name, stdata[0].passwd);
-        stAccount.login();
+        StudentAccount stAccount = new StudentAccount(stdata[0].name, stdata[0].passwd);        
+        Student st = (Student) stAccount.login();
+        
+        st.sendMessage(0, 0, String.format("%s sends a message", stAccount.getName()));
         stAccount.logout();
     }
 }

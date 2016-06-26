@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.mislab.test.event;
 
 import org.mislab.api.User;
@@ -14,14 +9,21 @@ import org.mislab.api.event.OnlineExamEventManager;
  * @author Max
  */
 public abstract class UserAccount implements OnlineExamEventListener {
+    protected String name, password;
+    
     protected OnlineExamEventManager evMgr = null;    
     
-    public UserAccount() {
+    public UserAccount(String n, String pw) {
+        name = n; password = pw;
+        
         evMgr = OnlineExamEventManager.getInstance();
         setupEventListener();
     }
 
+    public String getName() { return name; }
     public abstract void setupEventListener();
     public abstract User login();
-    public abstract void logout();    
+    public abstract void logout();
+    
+    public String toString() { return "<"+name+">"; }
 }
