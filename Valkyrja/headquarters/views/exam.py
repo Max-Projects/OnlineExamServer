@@ -24,7 +24,7 @@ def exams_list(request, c_id):
 
         for exam in course.exams.all():
             exams.append({
-                "id": exam.id,
+                "examId": exam.id,
                 "examName": exam.title,
                 "startTime": (exam.start_time.replace(tzinfo=None) - epoch).total_seconds() * 1000,
                 "duration": exam.duration
