@@ -6,6 +6,8 @@ import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -31,7 +33,16 @@ public class Utils {
             com.squareup.okhttp.Response r = client.newCall(request).execute();
             
             Gson gson = new Gson();
-            JsonObject json = gson.fromJson(r.body().string(), JsonObject.class);
+            String msg = r.body().string();
+            System.out.println("before jsonObject: "+msg);
+//            File file = new File("/Users/Max/Desktop/tmp.html");
+//            file.createNewFile();
+//            try (FileWriter fw = new FileWriter(file)) {
+//                fw.write(msg);
+//            }
+            JsonObject json = gson.fromJson(msg, JsonObject.class);
+//            JsonObject json = gson.fromJson(r.body().string(), JsonObject.class);
+            System.out.println("after jsonObject");
             response = new Response(json);
         } catch (IOException ex) {
             LOGGER.log(Level.SEVERE, null, ex);

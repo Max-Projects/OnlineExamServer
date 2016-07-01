@@ -36,8 +36,7 @@ public class TeacherConsole extends TestConsole {
         
         if (resp.success()) {
             ArrayList exams = (ArrayList) resp.getContent().get("exams");
-            System.out.println("exams"+exams.toString());
-            examId = (int) ((Map)exams.get(0)).get("id");
+            examId = (int) ((Map)exams.get(0)).get("examId");
         } else {
             System.out.println("query course FAILED!");            
         }
@@ -47,8 +46,8 @@ public class TeacherConsole extends TestConsole {
     public static void main(String[] args) {
         TeacherConsole tcon = new TeacherConsole();
         
-        TeacherAccount t = new TeacherAccount(tdata[0].name, tdata[0].passwd);
-        Teacher tch = (Teacher) t.login();
+        TeacherAccount tacct = new TeacherAccount(tdata[0].name, tdata[0].passwd);
+        Teacher tch = (Teacher) tacct.login();
         
         int courseId = tcon.getCourseId(tch);
         int examId = tcon.getExamId(tch, courseId);

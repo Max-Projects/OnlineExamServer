@@ -20,7 +20,7 @@ def new_message(exam: Exam, user: User, message: str):
     course = Course.objects.get(exams__id=exam.id)
 
     teacher = course.teacher
-    students = course.students()
+    students = course.students.all()
 
     records = LoggingInUser.objects.filter(user__in=students) | LoggingInUser.objects.filter(user=teacher)
 
