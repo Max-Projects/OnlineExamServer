@@ -9,7 +9,7 @@ import org.mislab.api.Teacher;
  *
  * @author Max
  */
-public class TeacherTestEnd {
+public class TeacherConsole extends TestConsole {
     
     public static TData[] tdata = {
         new TData("max", "max"),
@@ -45,7 +45,7 @@ public class TeacherTestEnd {
     }
     
     public static void main(String[] args) {
-        TeacherTestEnd tend = new TeacherTestEnd();
+        TeacherConsole tend = new TeacherConsole();
         
         TeacherAccount t = new TeacherAccount(tdata[0].name, tdata[0].passwd);
         Teacher tch = (Teacher) t.login();
