@@ -45,13 +45,13 @@ public class TeacherConsole extends TestConsole {
     }
     
     public static void main(String[] args) {
-        TeacherConsole tend = new TeacherConsole();
+        TeacherConsole tcon = new TeacherConsole();
         
         TeacherAccount t = new TeacherAccount(tdata[0].name, tdata[0].passwd);
         Teacher tch = (Teacher) t.login();
         
-        int courseId = tend.getCourseId(tch);
-        int examId = tend.getExamId(tch, courseId);
+        int courseId = tcon.getCourseId(tch);
+        int examId = tcon.getExamId(tch, courseId);
         
         System.out.println(String.format("cid: %d, eid:%d", courseId, examId));
         tch.sendMessage(courseId, examId, "hello");
