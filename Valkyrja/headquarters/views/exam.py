@@ -365,7 +365,7 @@ def extend_exam(request, c_id, e_id):
 
 def send_message(request, c_id, e_id):
     response_data = {"errorCode": ErrorCode.OK}
-
+    print("in send_message!!!")
     try:
         req_body = json.loads(request.body.decode("utf-8"))
 

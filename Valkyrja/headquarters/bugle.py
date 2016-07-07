@@ -17,6 +17,8 @@ def call(targets_ip: list, message: dict):
 
 
 def new_message(exam: Exam, user: User, message: str):
+    print("new_message from %s" % user.name)
+
     course = Course.objects.get(exams__id=exam.id)
 
     teacher = course.teacher

@@ -20,7 +20,6 @@ public class StudentAccount extends UserAccount {
 
     @Override
     public void setupEventListener() {
-        evMgr.addEventListener(this, EventType.Chat, EventAction.NewMessage);
         evMgr.addEventListener(this, EventType.Exam, EventAction.Extend);
         evMgr.addEventListener(this, EventType.Exam, EventAction.Halt);
         evMgr.addEventListener(this, EventType.Exam, EventAction.Pause);

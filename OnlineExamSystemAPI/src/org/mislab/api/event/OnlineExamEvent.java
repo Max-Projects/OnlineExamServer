@@ -56,6 +56,6 @@ public class OnlineExamEvent extends EventObject {
     
     @Override
     public String toString() {
-      return String.format("evtype:<%s,%s>", type, action);
+      return String.format("<ev:%s,%s>", type, action);
     }
 }

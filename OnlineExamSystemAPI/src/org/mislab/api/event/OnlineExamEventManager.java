@@ -114,7 +114,7 @@ public class OnlineExamEventManager {
         ArrayList<OnlineExamEventListener> listeners = (ArrayList) listenerMgr.get(ev);
         
         for (OnlineExamEventListener listener: listeners) {
-            System.out.println("fire: " + listener);
+//            System.out.println("fire: " + listener);
             listener.handleOnlineExamEvent(e);
         }
     }    

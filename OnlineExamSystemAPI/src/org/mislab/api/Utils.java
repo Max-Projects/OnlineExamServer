@@ -34,7 +34,7 @@ public class Utils {
             
             Gson gson = new Gson();
             String msg = r.body().string();
-            System.out.println("before jsonObject: "+msg);
+//            System.out.println("RESP: "+msg);
 //            File file = new File("/Users/Max/Desktop/tmp.html");
 //            file.createNewFile();
 //            try (FileWriter fw = new FileWriter(file)) {
@@ -42,7 +42,6 @@ public class Utils {
 //            }
             JsonObject json = gson.fromJson(msg, JsonObject.class);
 //            JsonObject json = gson.fromJson(r.body().string(), JsonObject.class);
-            System.out.println("after jsonObject");
             response = new Response(json);
         } catch (IOException ex) {
             LOGGER.log(Level.SEVERE, null, ex);

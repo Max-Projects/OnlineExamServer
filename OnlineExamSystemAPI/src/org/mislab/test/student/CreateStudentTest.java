@@ -30,12 +30,12 @@ public class CreateStudentTest {
     public static void main(String[] args) {
         CreateStudentTest cst = new CreateStudentTest();
 
-        cst.registerStudent("ivy", "student", "任芝萱", Role.Student,
-            "4025s", "ivy@student.com", 104, new byte[5]);
-//        cst.registerStudent("chris", "student", "周意立", Role.Student,
-//            "4026s", "christine@student.com", 104, new byte[5]);
-//        cst.registerStudent("lili", "student", "黃莉玲", Role.Student,
-//            "4027s", "lilian@student.com", 104, new byte[5]);
+        cst.registerStudent("alan", "alan", "Alan Walker", Role.Student,
+            "100", "alan@student.com", 104, new byte[5]);
+        cst.registerStudent("bob", "bob", "Bob Bush", Role.Student,
+            "101", "bob@student.com", 104, new byte[5]);
+        cst.registerStudent("cann", "cann", "Cann Curry", Role.Student,
+            "102", "cann@student.com", 104, new byte[5]);
         
     }
 }

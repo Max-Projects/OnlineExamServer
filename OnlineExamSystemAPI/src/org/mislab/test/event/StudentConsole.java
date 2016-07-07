@@ -17,9 +17,11 @@ public class StudentConsole extends TestConsole {
         Student st = (Student) stAccount.login();
         StudentConsole scon = new StudentConsole();
         
-        scon.pause(1000);
-        st.sendMessage(0, 0, String.format("%s sends a message", stAccount.getName()));
-        scon.pause(2000);
+//        scon.pause(1000);
+        System.out.println("alan sends message!");
+        st.sendMessage(1, 1, String.format("%s sends a message", stAccount.getName()));
+        System.out.println("alan's message is sent!");
+//        scon.pause(2000);
         
         stAccount.logout();
     }
