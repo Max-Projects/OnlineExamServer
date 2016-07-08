@@ -11,49 +11,23 @@ import org.mislab.api.Teacher;
  */
 public class TeacherConsole extends TestConsole {
     
-    public static TData[] tdata = {
+    static TData[] tdata = {
         new TData("max", "max"),
         new TData("chico", "chico")
     };    
     
-    public int getCourseId(Teacher t) {
-        Response resp = t.queryCourses();
-        int courseId = -1;
-        
-        if (resp.success()) {
-            ArrayList courses = (ArrayList) resp.getContent().get("courses");
-            
-            courseId = (int) ((Map)courses.get(0)).get("courseId");
-        } else {
-            System.out.println("query course FAILED!");            
-        }
-        return courseId;
-    }
-    
-    public int getExamId(Teacher t, int cid) {
-        Response resp = t.queryExams(cid);
-        int examId = -1;
-        
-        if (resp.success()) {
-            ArrayList exams = (ArrayList) resp.getContent().get("exams");
-            examId = (int) ((Map)exams.get(0)).get("examId");
-        } else {
-            System.out.println("query course FAILED!");            
-        }
-        return examId;
-    }
-    
     public static void main(String[] args) {
-        TeacherConsole tcon = new TeacherConsole();
+//        TeacherConsole tcon = new TeacherConsole();
         
-        TeacherAccount tacct = new TeacherAccount(tdata[0].name, tdata[0].passwd);
-        Teacher tch = (Teacher) tacct.login();
+        TeacherAccount tch = new TeacherAccount(tdata[0].name, tdata[0].passwd);
+        tch.login();
         
-        int courseId = tcon.getCourseId(tch);
-        int examId = tcon.getExamId(tch, courseId);
+        int courseId = tch.getCourseId();
+        int examId = tch.getExamId(courseId);
         
         System.out.println(String.format("cid: %d, eid:%d", courseId, examId));
-        tch.sendMessage(courseId, examId, "hello");
+        tch.getUser().sendMessage(courseId, examId, "hello");
+        tch.logout();
         
     }
 }

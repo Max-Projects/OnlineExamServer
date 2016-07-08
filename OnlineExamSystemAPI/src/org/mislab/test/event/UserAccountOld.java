@@ -5,31 +5,32 @@ import java.util.Map;
 import org.mislab.api.Response;
 import org.mislab.api.Teacher;
 import org.mislab.api.User;
+import org.mislab.api.event.OnlineExamEventListener;
 import org.mislab.api.event.OnlineExamEventManager;
 
 /**
  *
  * @author Max
  */
-public abstract class UserAccount implements UserAccountInt {
+public abstract class UserAccountOld implements OnlineExamEventListener {
     protected String name, password;
-    protected User user;
+    protected UserAccountOld user;
     
     protected OnlineExamEventManager evMgr = null;    
     
-    public UserAccount(String n, String pw) {
+    public UserAccountOld(String n, String pw) {
         name = n; password = pw;
         
         evMgr = OnlineExamEventManager.getInstance();
         setupEventListener();
     }
 
-    public User login() {
+    public UserAccountOld login() {
         Response res = User.login(name, password);
         
         if (res.success()) {
             System.out.println(name+" login success!");
-            user = (User) res.getContent().get("user");
+            user = (UserAccountOld) res.getContent().get("user");
         } else {
             System.out.println(name+" login FAILED!!!");
         }
@@ -45,12 +46,8 @@ public abstract class UserAccount implements UserAccountInt {
         }
     }
 
-    /**
-     * get course id
-     * @return course id
-     */
-    public int getCourseId() {
-        Response resp = user.queryCourses();
+    public int getCourseId(Teacher t) {
+        Response resp = t.queryCourses();
         int courseId = -1;
         
         if (resp.success()) {
@@ -63,13 +60,8 @@ public abstract class UserAccount implements UserAccountInt {
         return courseId;
     }
     
-    /**
-     * get exam id by courseId (cid)
-     * @param cid Course id
-     * @return exam id
-     */
-    public int getExamId(int cid) {
-        Response resp = user.queryExams(cid);
+    public int getExamId(Teacher t, int cid) {
+        Response resp = t.queryExams(cid);
         int examId = -1;
         
         if (resp.success()) {
@@ -80,9 +72,9 @@ public abstract class UserAccount implements UserAccountInt {
         }
         return examId;
     }
-
-    public User getUser() { return user; }
+        
     public String getName() { return name; }
-    public String getPassword() { return password; }
+    public abstract void setupEventListener();
     
+    public String toString() { return "<"+name+">"; }
 }

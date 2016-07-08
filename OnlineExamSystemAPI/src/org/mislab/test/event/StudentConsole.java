@@ -13,16 +13,19 @@ public class StudentConsole extends TestConsole {
     };
         
     public static void main(String[] args) {
-        StudentAccount stAccount = new StudentAccount(stdata[0].name, stdata[0].passwd);        
-        Student st = (Student) stAccount.login();
-        StudentConsole scon = new StudentConsole();
+        StudentAccount st = new StudentAccount(stdata[0].name, stdata[0].passwd);
+        st.login();
         
 //        scon.pause(1000);
-        System.out.println("alan sends message!");
-        st.sendMessage(1, 1, String.format("%s sends a message", stAccount.getName()));
-        System.out.println("alan's message is sent!");
+        
+        int courseId = st.getCourseId();
+        int examId = st.getExamId(courseId);
+        
+        System.out.println(String.format("cid: %d, eid:%d", courseId, examId));
+        
+        st.getUser().sendMessage(courseId, examId, String.format("%s sends a message", st.getName()));
 //        scon.pause(2000);
         
-        stAccount.logout();
+        st.logout();
     }
 }
