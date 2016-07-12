@@ -1,13 +1,16 @@
 package org.mislab.test.event;
 
+import java.util.Timer;
+
 /**
  *
  * @author Max
  */
-public class TestConsole {
+public abstract class TestConsole implements Runnable {
+    
     public void pause(int millsec) {
         try {
-            Thread.sleep(millsec);
+            Thread.currentThread().sleep(millsec);
         } catch(Exception e) {
             System.out.println("TestTerminal pause error!");
             e.printStackTrace();

@@ -6,13 +6,13 @@ import json
 
 # call() should be renamed to dispatchMessages()
 def call(targets_ip: list, message: dict):
-    print("call-targets_ip: " + str(len(targets_ip)))
     for target in targets_ip:
+        print("bugle.call: %s !" % target)
         sock = socket.socket()
         sock.connect((target, 3001))
 
         sock.sendall(json.dumps(message).encode('UTF-8'))
-        print(str(message)+" is sent!")
+
         sock.close()
 
 
@@ -23,8 +23,11 @@ def new_message(exam: Exam, user: User, message: str):
 
     teacher = course.teacher
     students = course.students.all()
+    # students = course.students.all().exclude(id=user.id)
 
     records = LoggingInUser.objects.filter(user__in=students) | LoggingInUser.objects.filter(user=teacher)
+
+    records = records.exclude(id=user.id) # exclude himself
 
     call([record.ip_address for record in records], {
         "type": "Chat",

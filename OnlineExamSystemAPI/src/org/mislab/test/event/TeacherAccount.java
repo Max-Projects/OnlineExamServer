@@ -26,7 +26,8 @@ public class TeacherAccount extends UserAccount {
     
     @Override
     public void handleOnlineExamEvent(OnlineExamEvent e) {
-        System.out.println(String.format("%s got an event %s", this.getName(), e));        
+        String sname = (String) e.getContent().get("name");
+        System.out.println(String.format("%s got an event %s from %s", this.getName(), e, sname));
     }
     
 }

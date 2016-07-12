@@ -28,6 +28,7 @@ public class StudentAccount extends UserAccount {
     
     @Override
     public void handleOnlineExamEvent(OnlineExamEvent e) {
-        System.out.println(String.format("%s got an event %s", name, e));
+        String sname = (String) e.getContent().get("name");
+        System.out.println(String.format("%s got an event %s from %s", name, e, sname));
     }
 }

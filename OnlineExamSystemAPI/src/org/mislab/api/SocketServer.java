@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.mislab.api.event.OnlineExamEvent;
@@ -36,14 +37,21 @@ public class SocketServer extends Thread {
     public void run() {
         System.out.println("start socket server...");
         while (!server.isClosed()) {
+            System.out.println("server is about to accept!");
             try {
-                Socket socket = server.accept();
                 
+                Socket socket = server.accept();
+
                 handleConnection(socket);
+                
+            } catch (SocketException se) {
+                System.out.println("socket is closed!");
+                LOGGER.log(Level.WARNING, null, se);
             } catch (IOException ex) {
                 LOGGER.log(Level.SEVERE, null, ex);
-            }
+            } 
         }
+        System.out.println("socketserver is closed!");
     }
     
     private void handleConnection(Socket socket) {
