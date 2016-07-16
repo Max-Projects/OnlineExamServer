@@ -43,7 +43,7 @@ public class StudentConsole extends TestConsole {
         
         st.getUser().sendMessage(courseId, examId, String.format("%s sends a message", st.getName()));
 //        pause(1000);
-        timer.schedule(new LogoutTimerTest(st), 1000);        
+//        timer.schedule(new LogoutTimerTest(st), 1000);        
     }
     
     public static void main(String[] args) {

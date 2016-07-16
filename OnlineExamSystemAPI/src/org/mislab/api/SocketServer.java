@@ -46,7 +46,7 @@ public class SocketServer extends Thread {
                 
             } catch (SocketException se) {
                 System.out.println("socket is closed!");
-                LOGGER.log(Level.WARNING, null, se);
+                LOGGER.log(Level.INFO, "[logout]", se);
             } catch (IOException ex) {
                 LOGGER.log(Level.SEVERE, null, ex);
             } 

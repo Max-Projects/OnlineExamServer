@@ -14,7 +14,12 @@ public class TeacherConsole extends TestConsole {
     static TData[] tdata = {
         new TData("max", "max"),
         new TData("chico", "chico")
-    };    
+    };
+    
+    @Override
+    public void run() {
+        
+    }
     
     public static void main(String[] args) {
 //        TeacherConsole tcon = new TeacherConsole();

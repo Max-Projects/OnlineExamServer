@@ -1,7 +1,6 @@
 from django.db import models
 from django.utils import timezone
 
-
 class User(models.Model):
     username = models.CharField(max_length=20)
     password = models.CharField(max_length=64)
@@ -21,6 +20,9 @@ class User(models.Model):
         self.modify_time = timezone.now()
         return super().save(*args, **kwargs)
 
+    def __str__(self):
+        return self.name
+
     @property
     def role(self):
         return "teacher" if self.is_admin else "student"
@@ -33,6 +35,9 @@ class Course(models.Model):
     teacher = models.ForeignKey("User", related_name="teacher")
     students = models.ManyToManyField("User", related_name="students")
     exams = models.ManyToManyField("Exam")
+
+    def __str__(self):
+        return self.title
 
 
 class Exam(models.Model):
@@ -53,12 +58,16 @@ class Exam(models.Model):
         self.modify_time = timezone.now()
         return super().save(*args, **kwargs)
 
+    def __str__(self):
+        return self.title
 
 class Problem(models.Model):
     title = models.CharField(max_length=100)
     description = models.CharField(max_length=1000)
     test_data = models.ManyToManyField("TestData")
 
+    def __str__(self):
+        return self.title
 
 class TestData(models.Model):
     input = models.CharField(max_length=5000)
@@ -78,6 +87,8 @@ class ChatMessage(models.Model):
 
         return super().save(*args, **kwargs)
 
+    def __str__(self):
+        return self.message
 
 class Snapshot(models.Model):
     snapshot = models.BinaryField()
@@ -140,3 +151,5 @@ class LoggingInUser(models.Model):
 
         return super().save(*args, **kwargs)
 
+    def __str__(self):
+        return str(self.user)

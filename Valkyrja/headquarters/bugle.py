@@ -6,6 +6,7 @@ import json
 
 # call() should be renamed to dispatchMessages()
 def call(targets_ip: list, message: dict):
+    print("bugle.call--->")
     for target in targets_ip:
         print("bugle.call: %s !" % target)
         sock = socket.socket()
@@ -17,51 +18,52 @@ def call(targets_ip: list, message: dict):
 
 
 def new_message(exam: Exam, user: User, message: str):
-    print("new_message from %s" % user.name)
 
     course = Course.objects.get(exams__id=exam.id)
 
     teacher = course.teacher
-    students = course.students.all()
-    # students = course.students.all().exclude(id=user.id)
+    # students = course.students.all()
+    students = course.students.all().exclude(student_id=user.student_id)
 
     records = LoggingInUser.objects.filter(user__in=students) | LoggingInUser.objects.filter(user=teacher)
 
-    records = records.exclude(id=user.id) # exclude himself
-
-    call([record.ip_address for record in records], {
-        "type": "Chat",
-        "action": "NewMessage",
-        "content": {
-            "name": user.name,
-            "message": message
-        }
-    })
+    print("!!bugle.new_msg-rec#: %d" % len(records))
+    if len(records) > 0:
+        call([record.ip_address for record in records], {
+            "type": "Chat",
+            "action": "NewMessage",
+            "content": {
+                "name": user.name,
+                "message": message
+            }
+        })
 
 
 def student_login(student: User):
     teachers = LoggingInUser.objects.filter(user__is_admin=True)
 
-    print("teacher#: " + str(len(teachers)))
-    call([teacher.ip_address for teacher in teachers], {
-        "type": "User",
-        "action": "Login",
-        "content": {
-            "name": student.name
-        }
-    })
+    print("student_login-teacher#: " + str(len(teachers)))
+    if len(teachers) > 0:
+        call([teacher.ip_address for teacher in teachers], {
+            "type": "User",
+            "action": "Login",
+            "content": {
+                "name": student.name
+            }
+        })
 
 
 def student_logout(student: User):
     teachers = LoggingInUser.objects.filter(user__is_admin=True)
-
-    call([teacher.ip_address for teacher in teachers], {
-        "type": "User",
-        "action": "Logout",
-        "content": {
-            "name": student.name
-        }
-    })
+    print("student_logout-teachers#: %d" % len(teachers))
+    if len(teachers) > 0:
+        call([teacher.ip_address for teacher in teachers], {
+            "type": "User",
+            "action": "Logout",
+            "content": {
+                "name": student.name
+            }
+        })
 
 
 def student_idle(student: User):
