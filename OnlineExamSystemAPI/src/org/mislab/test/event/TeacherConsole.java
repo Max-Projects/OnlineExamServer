@@ -1,38 +1,39 @@
 package org.mislab.test.event;
 
-import java.util.ArrayList;
-import java.util.Map;
-import org.mislab.api.Response;
-import org.mislab.api.Teacher;
-
 /**
  *
  * @author Max
  */
-public class TeacherConsole extends TestConsole {
-    
-    static TData[] tdata = {
+public class TeacherConsole extends UserConsole {
+    public static int COURSE_ID, EXAM_ID;
+    public static TData[] tdata = {
         new TData("max", "max"),
         new TData("chico", "chico")
     };
     
-    @Override
-    public void run() {
-        
-    }
-    
     public static void main(String[] args) {
-//        TeacherConsole tcon = new TeacherConsole();
-        
         TeacherAccount tch = new TeacherAccount(tdata[0].name, tdata[0].passwd);
-        tch.login();
+        TeacherConsole tcon = new TeacherConsole();
         
-        int courseId = tch.getCourseId();
-        int examId = tch.getExamId(courseId);
+        tcon.scheduledTaskRelTime(
+            () -> {
+                tch.login();
+                COURSE_ID = tch.getCourseId();
+                EXAM_ID = tch.getExamId(COURSE_ID);
+                System.out.println(String.format("t:cid: %d, eid:%d", COURSE_ID, EXAM_ID));
+            },
+            0);
         
-        System.out.println(String.format("cid: %d, eid:%d", courseId, examId));
-        tch.getUser().sendMessage(courseId, examId, "hello");
-        tch.logout();
         
+        tcon.scheduledTaskRelTime(
+            ()-> {
+                tch.getUser().sendMessage(COURSE_ID, EXAM_ID, "hello");        
+            },
+            1);
+        
+        tcon.scheduledTaskRelTime(
+            () -> 
+                tch.logout(), 
+            1);
     }
 }

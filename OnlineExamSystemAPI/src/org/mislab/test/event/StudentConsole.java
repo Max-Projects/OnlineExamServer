@@ -1,70 +1,42 @@
 package org.mislab.test.event;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 /**
  *
  * @author Max
  */
-class LogoutTimerTest extends TimerTask {
-    StudentAccount st;
-    
-    public LogoutTimerTest(StudentAccount s) {
-        st = s;
-    }
-    
-    public void run() {
-        st.logout();
-        System.out.println("alan logout!");
-    }
-}
 
-public class StudentConsole extends TestConsole {
+public class StudentConsole extends UserConsole {
+    public static int COURSE_ID, EXAM_ID;
+
     public static StData[] stdata = { 
         new StData("alan", "alan"),
         new StData("bob", "bob") 
     };
     
-    
-    public StudentConsole() {}
-
-    @Override
-    public void run() {
-        StudentAccount st = new StudentAccount(stdata[0].name, stdata[0].passwd);
-        Timer timer = new Timer();
-        
-        st.login();
-
-        int courseId = st.getCourseId();
-        int examId = st.getExamId(courseId);
-        
-        System.out.println(String.format("cid: %d, eid:%d", courseId, examId));
-        
-        st.getUser().sendMessage(courseId, examId, String.format("%s sends a message", st.getName()));
-//        pause(1000);
-//        timer.schedule(new LogoutTimerTest(st), 1000);        
-    }
-    
     public static void main(String[] args) {
-//        StudentAccount st = new StudentAccount(stdata[0].name, stdata[0].passwd);
+        StudentAccount st = new StudentAccount(stdata[0].name, stdata[0].passwd);
         StudentConsole scon = new StudentConsole();
-        Thread th = new Thread(scon);
-        th.start();
+
+        scon.scheduledTaskRelTime(
+            () -> {
+                st.login();
+                COURSE_ID = st.getCourseId();
+                EXAM_ID = st.getExamId(COURSE_ID);
+                System.out.println(String.format("s:cid: %d, eid:%d", COURSE_ID, EXAM_ID));
+            }, 
+            1);
         
         
-//        st.login();
+        scon.scheduledTaskRelTime(
+            ()-> {
+                st.getUser().sendMessage(COURSE_ID, EXAM_ID, "hello");        
+            }, 
+            1);
         
-//        scon.pause(1000);
-        
-//        int courseId = st.getCourseId();
-//        int examId = st.getExamId(courseId);
-        
-//        System.out.println(String.format("cid: %d, eid:%d", courseId, examId));
-//        
-//        st.getUser().sendMessage(courseId, examId, String.format("%s sends a message", st.getName()));
-//        scon.pause(1000);
-//        
-//        st.logout();
+        scon.scheduledTaskRelTime(
+            () -> 
+            st.logout(), 
+            1);
     }
 }
+
