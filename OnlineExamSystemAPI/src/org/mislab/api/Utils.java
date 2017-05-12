@@ -60,7 +60,7 @@ public class Utils {
         RequestBody body = RequestBody.create(JSON, json.toString());
         
         Request request = new Request.Builder()
-                .url(Config.HOST + url)
+                .url(Config.ServerURL + url)
                 .post(body)
                 .build();
         
@@ -69,7 +69,7 @@ public class Utils {
     
     public static Response get(OkHttpClient client, String url) {
         Request request = new Request.Builder()
-                .url(Config.HOST + url)
+                .url(Config.ServerURL + url)
                 .build();
         
         return sendRequest(client, request);
