@@ -3,7 +3,7 @@ from django.http import HttpResponse
 
 from headquarters import bugle
 from headquarters.error_code import ErrorCode
-from headquarters.models import User, Exam, Problem, AnswerSheet, Course, TestData
+from headquarters.models import User, Exam, Problem, AnswerSheet, Course, TestData, LoggingInUser
 
 import json
 
@@ -18,12 +18,15 @@ def problems_list(request, c_id, e_id):
     else:
         problems = []
 
-        for problem in exam.problems.all():
-            problems.append({
-                "id": problem.id,
-                "problemName": problem.title,
-                "description": problem.description
-            })
+        for exam in course.exams.all():
+            if exam.id == int(e_id):
+                # original code start here
+                for problem in exam.problems.all():
+                    problems.append({
+                        "problemId": problem.id,
+                        "problemName": problem.title,
+                        "description": problem.description
+                    })
 
         response_data["content"] = {
             "problems": problems
@@ -103,9 +106,11 @@ def source_code_and_result(request, c_id, e_id, p_id, s_id):
             course = Course.objects.get(id=c_id)
             exam = Exam.objects.get(id=e_id)
 
+            record = LoggingInUser.objects.get(user__id=s_id)
+
             code = req_body["sourceCode"]
             file_name = req_body["fileName"]
-            test_result = req_body["testResult"]
+            # test_result = req_body["testResult"]
         except KeyError:
             response_data["errorCode"] = ErrorCode.TooFewArgument
         except ObjectDoesNotExist:
@@ -116,7 +121,7 @@ def source_code_and_result(request, c_id, e_id, p_id, s_id):
                 source_code_file_name=file_name,
                 problem=problem,
                 student=student,
-                student_result=test_result
+                # student_result=test_result
             )
 
             bugle.student_submit(teacher=course.teacher,

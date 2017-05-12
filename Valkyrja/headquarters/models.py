@@ -61,6 +61,7 @@ class Exam(models.Model):
     def __str__(self):
         return self.title
 
+
 class Problem(models.Model):
     title = models.CharField(max_length=100)
     description = models.CharField(max_length=1000)
@@ -68,6 +69,7 @@ class Problem(models.Model):
 
     def __str__(self):
         return self.title
+
 
 class TestData(models.Model):
     input = models.CharField(max_length=5000)
@@ -88,7 +90,8 @@ class ChatMessage(models.Model):
         return super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.message
+        return str(self.user) + " _ " + self.message
+
 
 class Snapshot(models.Model):
     snapshot = models.BinaryField()
@@ -104,6 +107,9 @@ class Snapshot(models.Model):
 
         # not known yet!!!
         return super().save(*args, **kwargs)
+
+    def __str__(self):
+        return str(self.student.name) + " _ " + str(self.create_time)
 
 
 class AnswerSheet(models.Model):
@@ -123,6 +129,9 @@ class AnswerSheet(models.Model):
 
         return super().save(*args, **kwargs)
 
+    def __str__(self):
+        return self.student
+
 
 class ExamResult(models.Model):
     score = models.IntegerField()
@@ -137,6 +146,9 @@ class ExamResult(models.Model):
             self.create_time = timezone.now()
 
         return super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.student
 
 
 class LoggingInUser(models.Model):

@@ -1,6 +1,8 @@
 from datetime import datetime
-from django.core.exceptions import ObjectDoesNotExist
+
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.http import HttpResponse
+from django.core.serializers.json import DjangoJSONEncoder
 
 from headquarters import bugle
 from headquarters.error_code import ErrorCode
@@ -88,9 +90,12 @@ def attend_exam(request, c_id, e_id, s_id):
         record = LoggingInUser.objects.get(user__student_id=s_id)
     except ObjectDoesNotExist:
         response_data["errorCode"] = ErrorCode.UserNotLoggedIn
+    except MultipleObjectsReturned:
+        response_data["errorCode"] = ErrorCode.MultipleObjectsReturned
     else:
         record.state = UserState.InExam
         record.save()
+        bugle.attend_exam(record, s_id)
 
     return HttpResponse(json.dumps(response_data))
 
@@ -123,6 +128,7 @@ def snapshot(request, c_id, e_id, s_id):
         }
     elif request.method == "POST":
         try:
+            student = User.objects.get(id=s_id)
             req_body = json.loads(request.body.decode("utf-8"))
 
             exam = Exam.objects.get(id=e_id)
@@ -132,13 +138,14 @@ def snapshot(request, c_id, e_id, s_id):
         except ObjectDoesNotExist:
             response_data["errorCode"] = ErrorCode.ExamNotFound
         else:
-            Snapshot.objects.create(
+            snapshot_obj = Snapshot.objects.create(
                 snapshot=bytes(image, "utf-8"),
                 exam=exam,
                 student=User.objects.get(id=s_id)
             )
+            bugle.student_send_snapshot(student, snapshot_obj)
 
-    return HttpResponse(json.dumps(response_data))
+    return HttpResponse(json.dumps(response_data, cls=DjangoJSONEncoder))
 
 
 def request_snapshot(request, c_id, e_id, s_id):
@@ -158,7 +165,7 @@ def start_monitor(request, c_id, e_id, s_id):
     response_data = {"errorCode": ErrorCode.OK}
 
     try:
-        student = User.objects.get(student_id=s_id)
+        student = User.objects.get(id=s_id)
     except ObjectDoesNotExist:
         response_data["errorCode"] = ErrorCode.StudentNotFound
     else:
@@ -188,6 +195,7 @@ def handle_key_event(request, c_id, e_id, s_id):
 
         key_code = req_body["keyCode"]
         key_event_type = req_body["keyEventType"]
+        key_char = req_body["keyChar"]
 
         course = Course.objects.get(id=c_id)
     except KeyError:
@@ -197,7 +205,8 @@ def handle_key_event(request, c_id, e_id, s_id):
     else:
         bugle.send_key_event(course.teacher, {
             "keyCode": key_code,
-            "keyEventType": key_event_type
+            "keyEventType": key_event_type,
+            "keyChar": key_char
         })
 
     return HttpResponse(json.dumps(response_data))
@@ -409,7 +418,7 @@ def chat_history(request, c_id, e_id):
                 "message": chat_message.message,
                 "from": chat_message.user.name,
                 "role": chat_message.user.role,
-                "time": (chat_message.create_time.replace(txinfo=None) - epoch).total_seconds() * 1000
+                "time": (chat_message.create_time.replace(tzinfo=None) - epoch).total_seconds() * 1000
             })
 
         response_data["content"] = {

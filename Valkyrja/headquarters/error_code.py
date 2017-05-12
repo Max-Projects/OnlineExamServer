@@ -20,3 +20,4 @@ class ErrorCode(IntEnum):
     ProblemNotFound = 14
     UserNotFound = 15
     DuplicatedRegistration = 16
+    MultipleObjectsReturned = 17
