@@ -63,6 +63,7 @@ public class Student extends User {
         
         json.addProperty("keyCode", keyEvent.getCode().ordinal());
         json.addProperty("keyEventType", keyEvent.getEventType().getName());
+        json.addProperty("keyChar", keyEvent.getText());
         
         return Utils.post(CLIENT, uri, json);
     }

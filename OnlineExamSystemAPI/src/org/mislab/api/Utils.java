@@ -6,14 +6,18 @@ import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.InterfaceAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -79,6 +83,50 @@ public class Utils {
             
             return "localhost";
         }
+    }
+    
+        private static String[] getHostAddresses() {
+        Set<String> hostAddresses = new HashSet<>();
+        try {
+            for (NetworkInterface ni : Collections.list(NetworkInterface.getNetworkInterfaces())) {
+                if (!ni.isLoopback() && ni.isUp() && ni.getHardwareAddress() != null) {
+                    for (InterfaceAddress ia : ni.getInterfaceAddresses()) {
+                        if (ia.getBroadcast() != null) {  //If limited to IPV4
+                            hostAddresses.add(ia.getAddress().getHostAddress());
+                        }
+                    }
+                }
+            }
+        } catch (SocketException e) {
+            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, null, e);
+       }
+
+        return hostAddresses.toArray(new String[0]);
+    }
+
+    private static String getLocalIPv4Addr() {
+        String[] haddrs = getHostAddresses();
+        String localIP = "127.0.0.1";
+        
+        for (String addr : haddrs) {
+            if (addr.startsWith("192.168.0")) {
+                localIP = addr;
+                break;
+            }
+            if (addr.startsWith("192.168.1")) {
+                localIP = addr;
+                break;
+            }
+            if (addr.startsWith("192.168")) {
+                localIP = addr;
+                break;
+            }
+            if (addr.startsWith("172.16")) {
+                localIP = addr;
+            }
+        }
+        return localIP;
     }
     
     public static Map<String, Object> convert2Integer(Map<String, Object> map) {
