@@ -73,6 +73,13 @@ public class OnlineExamEventManager {
         
         listenerMgr.put( new OnlineExamEventType(EventType.Monitor, EventAction.KeyEvent), new ArrayList<>());
         listenerMgr.put( new OnlineExamEventType(EventType.Monitor, EventAction.RequestSnapshot), new ArrayList<>());
+
+        listenerMgr.put( new OnlineExamEventType(EventType.Monitor, EventAction.Start), new ArrayList<>());
+        listenerMgr.put( new OnlineExamEventType(EventType.Monitor, EventAction.Stop), new ArrayList<>());
+        listenerMgr.put( new OnlineExamEventType(EventType.Monitor, EventAction.RequestSnapshot), new ArrayList<>());
+        listenerMgr.put( new OnlineExamEventType(EventType.Monitor, EventAction.SendSnapshot), new ArrayList<>());
+        listenerMgr.put( new OnlineExamEventType(EventType.Exam, EventAction.Attend), new ArrayList<>());
+
     }
     
     /**
